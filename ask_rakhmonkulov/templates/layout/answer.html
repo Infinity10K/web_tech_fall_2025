@@ -1,0 +1,24 @@
+<div class="card">
+  <div class="card-body d-flex gap-3">
+    <div class="col-2">
+      <div class="image border" style="height: 100px; width: 100px">
+        <img src="img.jpg" alt="img" />
+      </div>
+      <div class="card__likes">
+        <input value="5" type="number" class="form-control" />
+      </div>
+    </div>
+    <div>
+      <h5 class="card-title">
+        {{ answer.username }}
+      </h5>
+      <p class="card-text">{{ answer.text }}</p>
+      <div class="d-flex gap-2 align-items-center">
+        <div>
+          <input type="checkbox" name="correct">
+          <label for="correct">Correct!</label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
