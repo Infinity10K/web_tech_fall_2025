@@ -1,0 +1,25 @@
+<div class="card">
+  <div class="card-body d-flex gap-3">
+    <div class="col-2">
+      <div class="image border" style="height: 100px; width: 100px">
+        <img src="img.jpg" alt="img" />
+      </div>
+      <div class="card__likes">
+        <input value="5" type="number" class="form-control" />
+      </div>
+    </div>
+    <div>
+      <h5 class="card-title">
+        <a href="{% url 'question' question.id %}">{{ q.title }}</a>
+      </h5>
+      <p class="card-text">{{ q.text }}</p>
+      <div class="d-flex gap-2 align-items-center">
+        <a href="#" class="btn btn-outline-success">Answers (3)</a>
+        <div class="footer__tags">
+          <a href="#">black-jack</a>
+          <a href="#">bender</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
