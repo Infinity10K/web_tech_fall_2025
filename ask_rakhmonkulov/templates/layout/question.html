@@ -12,7 +12,7 @@
       <h5 class="card-title text-break">
         <a href="{% url 'question' q.id %}">{{ q.title }}</a>
       </h5>
-      <p class="card-text text-break">{{ q.text }}</p>
+      <p class="card-text text-break">{{ q.text | linebreaks }}</p>
       <div class="d-flex gap-2 align-items-center">
         <a href="#" class="btn btn-outline-success">Answers ({{ q.answer_set.count }})</a>
         <div class="footer__tags">
