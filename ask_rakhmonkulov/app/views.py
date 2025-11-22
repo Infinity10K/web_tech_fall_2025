@@ -1,6 +1,11 @@
+from django.contrib import auth
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.core.paginator import Paginator
+from django.urls import reverse, reverse_lazy
 
+from app.forms import LoginForm, RegisterForm
 from app.models import Question, Answer
 
 
@@ -27,6 +32,7 @@ def paginate(request, objects, per_page=5):
     return page
 
 
+@login_required(login_url=reverse_lazy('login'))
 def index(request):
     questions = Question.objects.all()
     page = paginate(request, questions)
@@ -54,3 +60,37 @@ def question(request, question_id):
         'answers': page.object_list,
         'page_obj': page,   
     })
+
+def login(request):
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+
+            user = auth.authenticate(username=username, password=password)
+            if user:
+                auth.login(request, user)
+                return HttpResponseRedirect(reverse('index'))
+            else:
+                form.add_error(None, 'Invalid username or password.')
+    else:
+        form = LoginForm()
+    return render(request, 'login.html', {'form': form})
+
+def logout(request):
+    auth.logout(request)
+    return HttpResponseRedirect(reverse('index'))
+
+def register(request):
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            auth.login(request, user)
+            return HttpResponseRedirect(reverse('index'))
+    else:
+        form = RegisterForm()
+
+    return render(request, 'register.html', {'form': form})
+
