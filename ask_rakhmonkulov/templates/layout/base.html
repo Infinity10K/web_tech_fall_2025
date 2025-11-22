@@ -29,10 +29,10 @@
             <img src="img.jpg" alt="img" />
           </div>
           <div class="content">
-            <div class="content__name">Dr. Pepper</div>
+            <div class="content__name">{{ request.user.username }}</div>
             <div class="content__links">
               <a href="#">Settings</a>
-              <a href="#">Log out</a>
+              <a href="{% url 'logout' %}">Log out</a>
             </div>
           </div>
         </div>
