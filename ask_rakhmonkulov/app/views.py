@@ -1,13 +1,15 @@
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
+from django.contrib.auth.models import User
+from django.db.models import Count
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.core.paginator import Paginator
 from django.urls import reverse, reverse_lazy
+from django.views.decorators.http import require_POST
 
 from app.forms import LoginForm, RegisterForm
-from app.models import Question, Answer
-
+from app.models import Question, Answer, Profile, QuestionLike
 
 QUESTIONS = [{
     'id': i,
@@ -34,7 +36,7 @@ def paginate(request, objects, per_page=5):
 
 @login_required(login_url=reverse_lazy('login'))
 def index(request):
-    questions = Question.objects.all()
+    questions = Question.objects.annotate(likes_count=Count('question_like')).all()
     page = paginate(request, questions)
 
     return render(request, 'index.html', context={
@@ -84,7 +86,7 @@ def logout(request):
 
 def register(request):
     if request.method == 'POST':
-        form = RegisterForm(request.POST)
+        form = RegisterForm(request.POST, request.FILES)
         if form.is_valid():
             user = form.save()
             auth.login(request, user)
@@ -94,3 +96,21 @@ def register(request):
 
     return render(request, 'register.html', {'form': form})
 
+def users(request):
+    profiles = Profile.objects.all()
+
+    return render(request, 'users.html', context={
+        'profiles': profiles,
+    })
+
+@require_POST
+@login_required
+def like_question(request, question_id):
+    profile = Profile.objects.get(id=request.user.id)
+    question = Question.objects.annotate(likes_count=Count('question_like')).get(id=question_id)
+    question_like, is_created = QuestionLike.objects.get_or_create(question=question, profile=profile)
+
+    if not is_created:
+        question_like.delete()
+
+    return JsonResponse({'likeCount': question.likes_count})

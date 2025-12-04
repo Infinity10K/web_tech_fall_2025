@@ -9,7 +9,7 @@ class QuestionManager(models.Manager):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.PROTECT)
-    # avatar = models.ImageField(default='default.jpg', upload_to='profile_pics')
+    avatar = models.ImageField(default='default.jpg', upload_to='profile_pics')
 
     def __str__(self):
         return self.user.username
@@ -51,3 +51,7 @@ class Answer(models.Model):
 
     def __str__(self):
         return self.text[:50]
+
+class QuestionLike(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.PROTECT, related_name='question_like')
+    profile = models.ForeignKey(Profile, on_delete=models.PROTECT)

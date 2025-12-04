@@ -1,0 +1,16 @@
+{% extends "layout/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="d-flex gap-3 align-items-center">
+  <h3>Users</h3>
+</div>
+{% for profile in profiles %}
+  <div>
+    <img src="{{ profile.avatar.url }}"/>
+  </div>
+{% endfor %}
+
+{% include "layout/paginator.html" %}
+
+{% endblock %}
