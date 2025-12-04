@@ -5,7 +5,9 @@
         <img src="img.jpg" alt="img" />
       </div>
       <div class="card__likes">
-        <input value="5" type="number" class="form-control" />
+    {#        <input value="5" type="number" class="form-control" />#}
+              <span data-like-counter="{{ q.id }}">{{ q.likes_count }}</span>
+              <button class="btn btn-info" data-question-id="{{ q.id }}">Like</button>
       </div>
     </div>
     <div>

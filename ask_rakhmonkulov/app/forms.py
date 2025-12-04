@@ -14,11 +14,11 @@ class LoginForm(forms.Form):
     #         raise forms.ValidationError('Please enter a valid username.')
     #     return username
 
-    def clean(self):
-        cleaned_data = super().clean()
-        if cleaned_data.get('username') == 'admin':
-            raise forms.ValidationError('Please enter a valid username!!!!.')
-        return cleaned_data
+    # def clean(self):
+    #     cleaned_data = super().clean()
+    #     if cleaned_data.get('username') == 'admin':
+    #         raise forms.ValidationError('Please enter a valid username!!!!.')
+    #     return cleaned_data
 
 
 class RegisterForm(forms.Form):
@@ -42,7 +42,7 @@ class RegisterForm(forms.Form):
         user = User(username=username, email=email)
         user.set_password(password)
         user.save()
-        Profile.objects.create(user=user)
+        Profile.objects.create(user=user, avatar=self.cleaned_data['avatar'])
         return user
 
 
