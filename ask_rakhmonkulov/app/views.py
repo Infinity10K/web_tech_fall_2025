@@ -45,7 +45,10 @@ def index(request):
     })
 
 def hot(request):
-    page = paginate(request, QUESTIONS[::-1])
+    questions = Question.objects.annotate(likes_count=Count('question_like')).all()[::-1]
+    page = paginate(request, questions)
+
+    print(page)
 
     return render(request, 'hot.html', context={
         'questions': page.object_list,
